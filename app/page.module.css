@@ -1,150 +1,3449 @@
+/* =========================================================
+   COUVERTURE VASSEUR — PAGE PRINCIPALE
+   app/page.module.css
+   ========================================================= */
+
+:global(html) {
+  scroll-behavior: smooth;
+}
+
+:global(body) {
+  margin: 0;
+  background: #f7f8f6;
+  color: #0c131c;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+:global(*) {
+  box-sizing: border-box;
+}
+
+:global(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+:global(button),
+:global(input),
+:global(select),
+:global(textarea) {
+  font: inherit;
+}
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
 .page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
+  --navy: #0c131c;
+  --blue: #0061c6;
+  --blue-light: #eaf3fc;
+  --white: #ffffff;
+  --light: #f7f8f6;
+  --grey: #66717d;
+  --border: #dce1e5;
+  /* Manquait : utilisée par .serviceContent h3 et .projectInfo h3
+     mais jamais déclarée — ces titres retombaient sur la police
+     système au lieu du Georgia utilisé partout ailleurs. */
+  --font-display: Georgia, "Times New Roman", serif;
 }
 
-.main {
-  display: flex;
-  flex: 1;
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+.container {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+/* Wrapper générique réutilisé par Expertise, Méthode, Garanties,
+   FAQ. N'existait pas du tout dans le fichier d'origine : ces
+   sections n'avaient ni padding ni rythme visuel. */
+.section {
+  padding: 125px 0;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+
   width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
+  height: 88px;
+
+  z-index: 1000;
+
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid rgba(12, 19, 28, 0.08);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.header .container {
+  position: relative;
+
+  height: 88px;
+
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
+
+  gap: 30px;
 }
 
-.intro {
+.logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo img {
+  display: block;
+
+  width: 120px;
+  height: auto;
+
+  object-fit: contain;
+}
+
+/* Checkbox cachée qui pilote le menu mobile — voir .menuButton
+   et .navToggleInput:checked ~ .nav dans le media query mobile.
+   Aucun JS nécessaire : le menu reste utilisable sans JavaScript
+   et la nav reste dans le HTML servi (donc indexable). */
+.navToggleInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 30px;
+  margin-left: auto;
+}
+
+.nav a {
+  position: relative;
+
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+
+  color: #34404b;
+  text-decoration: none;
+
+  transition: color 0.25s ease;
+}
+
+.nav a::after {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+
+  width: 0;
+  height: 2px;
+
+  background: var(--blue);
+
+  transition: width 0.25s ease;
+}
+
+.nav a:hover {
+  color: var(--blue);
+}
+
+.nav a:hover::after {
+  width: 100%;
+}
+
+.phone {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
+  align-items: flex-end;
+
+  flex-shrink: 0;
+
+  text-decoration: none;
 }
 
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
+.phone span {
+  font-size: 16px;
+  font-weight: 800;
+
+  color: var(--navy);
 }
 
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
+.phone small {
+  margin-top: 3px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  color: var(--blue);
+
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
+/* C'est un <label htmlFor="nav-toggle"> côté JS, pas un <button> :
+   ça permet d'ouvrir/fermer le menu sans JavaScript. */
+.menuButton {
+  display: none;
+
+  border: 0;
+  background: transparent;
+
+  color: var(--navy);
+
+  font-size: 28px;
+  line-height: 1;
+
+  cursor: pointer;
+  user-select: none;
 }
 
-.ctas {
-  display: flex;
-  flex-direction: row;
+/* =========================================================
+   HERO — PREMIUM
+   ========================================================= */
+
+.hero {
+  position: relative;
+  min-height: 720px;
   width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: #0c131c;
 }
 
-.ctas a {
+/* =========================================================
+   IMAGE DE FOND
+   ========================================================= */
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  z-index: 0;
+}
+
+.heroImage img {
+  object-fit: cover;
+  object-position: center center;
+
+  transform: scale(1.02);
+
+  transition: transform 1.2s ease;
+}
+
+/* =========================================================
+   VOILE SUR L'IMAGE
+   ========================================================= */
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8, 14, 21, 0.45) 0%,
+      rgba(8, 14, 21, 0.58) 45%,
+      rgba(8, 14, 21, 0.78) 100%
+    );
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   CONTENEUR
+   ========================================================= */
+
+.hero .container {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+}
+
+/* =========================================================
+   CONTENU CENTRAL
+   ========================================================= */
+
+.heroContent {
+  width: min(900px, 100%);
+
+  margin: 0 auto;
+
+  padding: 110px 20px 100px;
+
   display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+/* =========================================================
+   EYEBROW
+   ========================================================= */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-bottom: 30px;
+
+  color: #9dcef4;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 0.18em;
+
+  text-transform: uppercase;
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: "";
+
+  width: 32px;
+  height: 1px;
+
+  background: #4da3e8;
+}
+
+/* =========================================================
+   TITRE PRINCIPAL
+   ========================================================= */
+
+.hero h1 {
+  max-width: 900px;
+
+  margin: 0;
+
+  color: #ffffff;
+
+  font-family: var(--font-display);
+
+  font-size: clamp(54px, 7vw, 92px);
+
+  font-weight: 400;
+
+  line-height: 0.98;
+
+  letter-spacing: -0.045em;
+
+  text-shadow:
+    0 4px 25px rgba(0, 0, 0, 0.25);
+}
+
+.hero h1 em {
+  color: #82bff0;
+
+  font-style: italic;
+}
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.heroText {
+  max-width: 680px;
+
+  margin: 32px auto 0;
+
+  color: #e0e6ec;
+
+  font-size: 17px;
+
+  line-height: 1.8;
+
+  text-align: center;
+
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   BLOC DEVIS — texte explicite "Devis gratuit sous 48 h"
+   Réutilisé tel quel dans le hero (fond sombre) et repris
+   dans .contactIntro (fond clair) avec une variante ci-dessous.
+   ========================================================= */
+
+.devisBadge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 2px;
+
+  margin-top: 28px;
+  padding: 12px 18px;
+
+  border-left: 3px solid var(--blue);
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(6px);
+}
+
+.devisBadge strong {
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.devisBadge span {
+  color: #cfe0f2;
+
+  font-size: 11px;
+}
+
+/* Variante fond clair, utilisée dans la section contact */
+.contactIntro .devisBadge {
+  background: rgba(0, 97, 198, 0.06);
+}
+
+.contactIntro .devisBadge strong {
+  color: var(--navy);
+}
+
+.contactIntro .devisBadge span {
+  color: var(--grey);
+}
+
+/* =========================================================
+   BOUTONS
+   ========================================================= */
+
+.heroButtons {
+  display: flex;
+
   justify-content: center;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+
+  flex-wrap: wrap;
+
+  gap: 14px;
+
+  margin-top: 40px;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
+.primaryButton,
+.secondaryButton {
+  min-height: 56px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 22px;
+
+  padding: 0 27px;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* =========================================================
+   BOUTON PRINCIPAL
+   ========================================================= */
+
+.primaryButton {
+  background: var(--blue);
+
+  color: #ffffff;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.primaryButton:hover {
+  background: #0874e2;
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.primaryButton span {
+  font-size: 20px;
+
+  line-height: 1;
+
+  transition:
+    transform 0.25s ease;
+}
+
+.primaryButton:hover span {
+  transform: translateX(4px);
+}
+
+/* =========================================================
+   BOUTON SECONDAIRE
+   ========================================================= */
+
+.secondaryButton {
+  border: 1px solid rgba(255, 255, 255, 0.45);
+
+  color: #ffffff;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(8px);
+}
+
+.secondaryButton:hover {
+  background: #ffffff;
+
+  border-color: #ffffff;
+
+  color: var(--navy);
+
+  transform: translateY(-3px);
+}
+
+/* =========================================================
+   STATISTIQUES — PREMIUM
+   ========================================================= */
+
+.heroStats {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+
+  margin-top: 60px;
+  padding-top: 28px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.stat {
+  min-width: 165px;
+
+  padding: 0 35px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   gap: 8px;
+
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+.stat:last-child {
+  border-right: none;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
+/* CHIFFRES */
+.stat strong {
+  color: #ffffff;
+
+  font-family: var(--font-display);
+
+  font-size: 32px;
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: -0.02em;
+
+  text-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* PETITS TEXTES */
+.stat span {
+  color: #a9cbed;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+
+  text-align: center;
+}
+
+/* =========================================================
+   SCROLL INDICATOR
+   ========================================================= */
+
+.heroScroll {
+  position: absolute;
+
+  z-index: 3;
+
+  right: 35px;
+  bottom: 30px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: #ffffff;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.2em;
+
+  text-decoration: none;
+
+  writing-mode: vertical-rl;
+
+  opacity: 0.8;
+}
+
+.heroScroll span {
+  width: 1px;
+
+  height: 42px;
+
+  background: #ffffff;
+
+  opacity: 0.7;
+}
+
+/* =========================================================
+   TABLETTE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .hero {
+    min-height: 680px;
   }
 
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
+  .heroContent {
+    padding: 100px 25px 90px;
   }
+
+  .hero h1 {
+    font-size: clamp(50px, 9vw, 75px);
+  }
+
+  .heroText {
+    font-size: 16px;
+  }
+
+  .heroStats {
+    margin-top: 55px;
+  }
+
+  .stat {
+    min-width: 120px;
+    padding: 0 20px;
+  }
+
+  .heroScroll {
+    right: 18px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .hero {
+    min-height: 720px;
+  }
+
+  .heroImage img {
+    object-position: center;
+  }
+
+  .heroOverlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(8, 14, 21, 0.55) 0%,
+        rgba(8, 14, 21, 0.75) 60%,
+        rgba(8, 14, 21, 0.9) 100%
+      );
+  }
+
+  .heroContent {
+    padding: 90px 20px 80px;
+  }
+
+  .eyebrow {
+    margin-bottom: 24px;
+
+    font-size: 9px;
+
+    letter-spacing: 0.12em;
+  }
+
+  .eyebrow::before,
+  .eyebrow::after {
+    width: 20px;
+  }
+
+  .hero h1 {
+    font-size: clamp(43px, 12vw, 60px);
+
+    line-height: 1;
+  }
+
+  .heroText {
+    max-width: 500px;
+
+    margin-top: 25px;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+  }
+
+  .heroButtons {
+    width: 100%;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 32px;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+
+  .heroStats {
+    width: 100%;
+
+    margin-top: 45px;
+
+    padding-top: 22px;
+  }
+
+  .stat {
+    min-width: 0;
+
+    width: 33.333%;
+
+    padding: 0 8px;
+  }
+
+  .stat strong {
+    font-size: 22px;
+  }
+
+  .stat span {
+    font-size: 7px;
+
+    letter-spacing: 0.06em;
+  }
+
+  .heroScroll {
+    display: none;
+  }
+}
+
+/* =========================================================
+   TRUST BAR
+   La version desktop manquait entièrement : seule la variante
+   mobile existait, donc sur grand écran la barre de confiance
+   (RGE Qualibat, décennale, avis, devis) s'affichait sans
+   grille ni bordures.
+   ========================================================= */
+
+.trustBar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+}
+
+.trustBar .container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.trustItem {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  min-height: 110px;
+  padding: 0 28px;
+
+  border-right: 1px solid var(--border);
+}
+
+.trustItem:last-child {
+  border-right: none;
+}
+
+.trustItem > span {
+  flex-shrink: 0;
+
+  color: var(--blue);
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+}
+
+.trustItem strong {
+  display: block;
+
+  color: var(--navy);
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.trustItem small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: var(--grey);
+
+  font-size: 11px;
 }
 
 @media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
+  .trustBar .container {
+    grid-template-columns: 1fr;
   }
 
-  .intro {
-    gap: 16px;
+  .trustItem,
+  .trustItem:first-child,
+  .trustItem:nth-child(3) {
+    min-height: auto;
+    padding: 18px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
   }
 
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
+  .trustItem:last-child {
+    border-bottom: 0;
   }
 
-  .page {
-    --background: #000;
-    --foreground: #000;
+  .trustItem strong {
+    font-size: 12px;
+  }
 
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  .trustItem small {
+    font-size: 10px;
   }
 }
 
-.code {
-  font-family: var(--font-geist-mono);
-  font-size: 0.9em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.1em 0.4em;
-  border-radius: 6px;
+/* =========================================================
+   EN-TÊTE DE SECTION GÉNÉRIQUE
+   Réutilisé par Expertise, Services, Réalisations, Méthode,
+   Garanties. N'existait pas dans le fichier d'origine (qui
+   définissait .expertiseHeader, jamais appelé par le JSX) :
+   les blocs titre + texte ne se mettaient jamais en colonnes.
+   ========================================================= */
+
+.sectionHeader {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 90px;
+  align-items: end;
+  margin-bottom: 75px;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5vw, 65px);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--navy);
+}
+
+.sectionHeader h2 em {
+  color: var(--blue);
+  font-style: italic;
+}
+
+.sectionHeader > p,
+.sectionHeaderText p {
+  margin: 0;
+  color: var(--grey);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* Utilisé uniquement dans Expertise, où le texte d'intro
+   tient sur deux paragraphes plutôt qu'un seul. */
+.sectionHeaderText {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionLabel {
+  display: block;
+  margin-bottom: 28px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+/* ---------------------------------------------------------
+   BLOC EXPERTISE
+   --------------------------------------------------------- */
+
+.expertiseGrid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  min-height: 560px;
+}
+
+/* ---------------------------------------------------------
+   IMAGE
+   --------------------------------------------------------- */
+
+.expertiseImage {
+  position: relative;
+  min-height: 560px;
+  overflow: hidden;
+  background: #dfe5ea;
+}
+
+.expertiseImage img {
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+
+.expertiseImage:hover img {
+  transform: scale(1.04);
+}
+
+/* Étiquette "MATIÈRE / ARDOISE" posée sur la photo — n'existait
+   pas dans le fichier d'origine. */
+.imageCaption {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  padding: 18px 22px;
+
+  background: rgba(12, 19, 28, 0.88);
+  border-left: 3px solid var(--blue);
+
+  backdrop-filter: blur(6px);
+
+  color: #ffffff;
+}
+
+.imageCaption span {
+  color: #82bff0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.imageCaption strong {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.imageCaption small {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+}
+
+/* ---------------------------------------------------------
+   TEXTE — appelé .expertiseContent côté JSX, .expertiseText
+   n'était jamais utilisé et ne s'appliquait donc jamais.
+   --------------------------------------------------------- */
+
+.expertiseContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 70px;
+  background: var(--navy);
+  color: #ffffff;
+}
+
+.smallLabel {
+  color: #76b7e9;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.expertiseContent h3 {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.15;
+}
+
+/* Premier H3 : titre d'accroche, traitement display */
+.expertiseContent h3:first-of-type {
+  margin-top: 15px;
+  font-size: 42px;
+  letter-spacing: -0.02em;
+}
+
+/* H3 suivant (ex : "Ardoise, zinc ou tuile") : sous-titre
+   plus discret pour ne pas rivaliser avec le premier. */
+.expertiseContent h3:not(:first-of-type) {
+  margin-top: 34px;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #82bff0;
+}
+
+.expertiseContent > p {
+  margin: 0 0 16px;
+  color: #aeb9c4;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.expertiseContent > p:last-of-type {
+  margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------
+   LISTE
+   --------------------------------------------------------- */
+
+.checkList {
+  display: grid;
+  gap: 14px;
+  margin: 28px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checkList li {
+  color: #dbe2e8;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.checkList li::before {
+  content: "✓";
+  margin-right: 10px;
+  color: #4d9de0;
+  font-weight: 800;
+}
+
+/* ---------------------------------------------------------
+   LIEN
+   --------------------------------------------------------- */
+
+.textLink {
+  width: fit-content;
+  margin-top: 10px;
+  padding-bottom: 7px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.textLink:hover {
+  color: #72b6ea;
+  border-color: #72b6ea;
+}
+
+/* =========================================================
+   EXPERTISE — TABLETTE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .sectionHeader {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-bottom: 50px;
+  }
+
+  .expertiseGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .expertiseImage {
+    min-height: 500px;
+  }
+
+  .expertiseContent {
+    padding: 60px;
+  }
+}
+
+/* =========================================================
+   EXPERTISE — MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .section {
+    padding: 80px 0;
+  }
+
+  .sectionHeader {
+    gap: 25px;
+    margin-bottom: 40px;
+  }
+
+  .sectionHeader h2 {
+    font-size: 42px;
+  }
+
+  .sectionHeader > p,
+  .sectionHeaderText p {
+    font-size: 14px;
+  }
+
+  .expertiseImage {
+    min-height: 360px;
+  }
+
+  .expertiseContent {
+    padding: 45px 25px;
+  }
+
+  .expertiseContent h3:first-of-type {
+    font-size: 34px;
+  }
+
+  .expertiseContent > p {
+    font-size: 14px;
+  }
+
+  .checkList {
+    gap: 12px;
+    margin: 22px 0;
+  }
+
+  .checkList li {
+    font-size: 12px;
+  }
+}
+/* =========================================================
+   SERVICES / PRESTATIONS
+   ========================================================= */
+
+.servicesSection {
+  background: #f7f8fa;
+}
+
+.servicesSection .sectionHeader {
+  margin-bottom: 60px;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ---------------------------------------------------------
+   CARTE SERVICE
+   --------------------------------------------------------- */
+
+.serviceCard {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid rgba(12, 19, 28, 0.08);
+  transition:
+    transform 0.45s ease,
+    box-shadow 0.45s ease,
+    border-color 0.45s ease;
+}
+
+.serviceCard:hover {
+  transform: translateY(-8px);
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 20px 50px rgba(12, 19, 28, 0.12);
+}
+
+/* ---------------------------------------------------------
+   IMAGE
+   --------------------------------------------------------- */
+
+.serviceImage {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  overflow: hidden;
+  background: #dfe3e8;
+}
+
+.serviceImage img {
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+
+.serviceCard:hover .serviceImage img {
+  transform: scale(1.07);
+}
+
+/* ---------------------------------------------------------
+   CONTENU
+   --------------------------------------------------------- */
+
+.serviceContent {
+  position: relative;
+  padding: 28px 28px 30px;
+}
+
+.serviceTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.serviceTop span:first-child {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--blue);
+}
+
+.serviceTop span:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(12, 19, 28, 0.12);
+  border-radius: 50%;
+  color: var(--navy);
+  font-size: 16px;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.serviceCard:hover .serviceTop span:last-child {
+  background: var(--blue);
+  color: #ffffff;
+  border-color: var(--blue);
+  transform: rotate(45deg);
+}
+
+.serviceContent h3 {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.15;
+  color: var(--navy);
+}
+
+.serviceContent p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #66717d;
+}
+
+/* ---------------------------------------------------------
+   ANIMATION D'APPARITION
+   --------------------------------------------------------- */
+
+.serviceCard {
+  animation: serviceAppear 0.7s ease both;
+}
+
+.serviceCard:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.serviceCard:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.serviceCard:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.serviceCard:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.serviceCard:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.serviceCard:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+.serviceCard:nth-child(7) {
+  animation-delay: 0.35s;
+}
+
+@keyframes serviceAppear {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE SERVICES
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .servicesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .serviceImage {
+    height: 220px;
+  }
+}
+
+@media (max-width: 650px) {
+  .servicesGrid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .serviceImage {
+    height: 240px;
+  }
+
+  .serviceContent {
+    padding: 24px;
+  }
+
+  .serviceContent h3 {
+    font-size: 22px;
+  }
+}
+
+/* =========================================================
+   RÉALISATIONS
+   ========================================================= */
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.projectCard {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid rgba(12, 19, 28, 0.08);
+  transition:
+    transform 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+.projectCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 60px rgba(12, 19, 28, 0.13);
+}
+
+/* ---------------------------------------------------------
+   GRANDE RÉALISATION
+   --------------------------------------------------------- */
+
+.projectFeatured {
+  grid-row: span 2;
+}
+
+.projectFeatured .projectImage {
+  height: 520px;
+}
+
+/* ---------------------------------------------------------
+   PETITES RÉALISATIONS
+   --------------------------------------------------------- */
+
+.projectCard:not(.projectFeatured) .projectImage {
+  height: 260px;
+}
+
+/* ---------------------------------------------------------
+   IMAGE
+   --------------------------------------------------------- */
+
+.projectImage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #dfe3e8;
+}
+
+.projectImage img {
+  object-fit: cover;
+  transition:
+    transform 0.8s ease,
+    filter 0.5s ease;
+}
+
+.projectCard:hover .projectImage img {
+  transform: scale(1.06);
+  filter: brightness(0.9);
+}
+
+/* ---------------------------------------------------------
+   ÉTIQUETTE SUR L'IMAGE
+   --------------------------------------------------------- */
+
+.projectTag {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  z-index: 2;
+  padding: 9px 13px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--navy);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+/* ---------------------------------------------------------
+   INFORMATIONS DU PROJET
+   --------------------------------------------------------- */
+
+.projectInfo {
+  padding: 28px 30px 32px;
+}
+
+.projectInfo > span {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--blue);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.projectInfo h3 {
+  margin: 0 0 12px;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 1.15;
+}
+
+.projectInfo p {
+  margin: 0;
+  color: #68737e;
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 620px;
+}
+
+/* ---------------------------------------------------------
+   ANIMATION
+   --------------------------------------------------------- */
+
+.projectCard {
+  animation: projectAppear 0.7s ease both;
+}
+
+.projectCard:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.projectCard:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.projectCard:nth-child(3) {
+  animation-delay: 0.25s;
+}
+
+@keyframes projectAppear {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — TABLETTE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .projectsGrid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 18px;
+  }
+
+  .projectFeatured {
+    grid-column: span 2;
+    grid-row: auto;
+  }
+
+  .projectFeatured .projectImage {
+    height: 420px;
+  }
+
+  .projectCard:not(.projectFeatured) .projectImage {
+    height: 240px;
+  }
+
+  .projectInfo {
+    padding: 24px;
+  }
+
+  .projectInfo h3 {
+    font-size: 23px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+  .projectsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 40px;
+  }
+
+  .projectFeatured {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .projectFeatured .projectImage,
+  .projectCard:not(.projectFeatured) .projectImage {
+    height: 260px;
+  }
+
+  .projectInfo {
+    padding: 22px;
+  }
+
+  .projectInfo h3 {
+    font-size: 21px;
+  }
+
+  .projectInfo p {
+    font-size: 14px;
+  }
+
+  .projectTag {
+    left: 14px;
+    top: 14px;
+    font-size: 9px;
+  }
+}
+
+/* =========================================================
+   04 — L'ENTREPRISE
+   ========================================================= */
+
+.aboutSection {
+  position: relative;
+  padding: 120px 0;
+  background: #0f172a;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.aboutSection::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  right: -220px;
+  top: -180px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.aboutSection .container {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: 90px;
+  align-items: center;
+}
+
+/* =========================================================
+   IMAGE DE L'ARTISAN
+   ========================================================= */
+
+.aboutImage {
+  position: relative;
+  min-height: 620px;
+  overflow: hidden;
+  background: #1e293b;
+}
+
+.aboutImage img {
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.aboutImage:hover img {
+  transform: scale(1.04);
+}
+
+/* =========================================================
+   BADGE SUR L'IMAGE
+   ========================================================= */
+
+.aboutImageOverlay {
+  position: absolute;
+  left: 28px;
+  bottom: 28px;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  padding: 24px 28px;
+
+  background: rgba(15, 23, 42, 0.92);
+  border-left: 3px solid var(--blue);
+
+  backdrop-filter: blur(8px);
+}
+
+.aboutImageOverlay strong {
+  display: block;
+
+  font-family: var(--font-display);
+  font-size: 58px;
+  line-height: 0.9;
+  font-weight: 400;
+
+  color: #ffffff;
+}
+
+.aboutImageOverlay span {
+  margin-top: 10px;
+
+  color: rgba(255, 255, 255, 0.7);
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+/* =========================================================
+   CONTENU ENTREPRISE
+   ========================================================= */
+
+.aboutContent {
+  max-width: 560px;
+}
+
+.aboutContent .sectionLabel {
+  color: #60a5fa;
+}
+
+.aboutContent h2 {
+  margin: 22px 0 30px;
+
+  color: #ffffff;
+
+  font-family: var(--font-display);
+  font-size: clamp(42px, 4vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.aboutContent h2 em {
+  color: #93c5fd;
+  font-style: italic;
+}
+
+.aboutContent p {
+  max-width: 560px;
+  margin: 20px 0 0;
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.aboutContent .aboutLead {
+  margin-top: 0 !important;
+  margin-bottom: 20px;
+
+  color: #ffffff !important;
+
+  font-size: 18px !important;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   STATISTIQUES
+   ========================================================= */
+
+.aboutStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  margin-top: 48px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.aboutStats > div {
+  padding: 25px 20px 25px 0;
+
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.aboutStats > div:not(:first-child) {
+  padding-left: 20px;
+}
+
+.aboutStats > div:last-child {
+  border-right: none;
+}
+
+.aboutStats strong {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #ffffff;
+
+  font-family: var(--font-display);
+  font-size: 38px;
+  line-height: 1;
+  font-weight: 400;
+}
+
+.aboutStats span {
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+.aboutImage {
+  animation: aboutImageAppear 0.9s ease both;
+}
+
+.aboutContent {
+  animation: aboutContentAppear 0.9s ease 0.15s both;
+}
+
+@keyframes aboutImageAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes aboutContentAppear {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* =========================================================
+   TABLETTE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .aboutSection {
+    padding: 90px 0;
+  }
+
+  .aboutSection .container {
+    grid-template-columns: 1fr;
+    gap: 55px;
+  }
+
+  .aboutImage {
+    min-height: 500px;
+  }
+
+  .aboutContent {
+    max-width: 100%;
+  }
+
+  .aboutContent h2 {
+    font-size: clamp(40px, 7vw, 58px);
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .aboutSection {
+    padding: 70px 0;
+  }
+
+  .aboutImage {
+    min-height: 420px;
+  }
+
+  .aboutImageOverlay {
+    left: 18px;
+    bottom: 18px;
+    padding: 18px 20px;
+  }
+
+  .aboutImageOverlay strong {
+    font-size: 46px;
+  }
+
+  .aboutContent h2 {
+    margin-top: 18px;
+    font-size: 38px;
+  }
+
+  .aboutContent .aboutLead {
+    font-size: 16px !important;
+  }
+
+  .aboutStats {
+    margin-top: 35px;
+  }
+
+  .aboutStats > div {
+    padding: 20px 10px 20px 0;
+  }
+
+  .aboutStats > div:not(:first-child) {
+    padding-left: 10px;
+  }
+
+  .aboutStats strong {
+    font-size: 30px;
+  }
+
+  .aboutStats span {
+    font-size: 9px;
+  }
+}
+
+/* =========================================================
+   NOTRE MÉTHODE
+   ========================================================= */
+
+.processGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 70px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.processItem {
+  position: relative;
+  min-height: 300px;
+  padding: 38px 32px 45px;
+  border-right: 1px solid var(--border);
+  transition:
+    background 0.35s ease,
+    transform 0.35s ease;
+}
+
+.processItem:first-child {
+  border-left: 1px solid var(--border);
+}
+
+.processItem:hover {
+  background: #f5f8fb;
+  transform: translateY(-4px);
+}
+
+.processItem > span {
+  display: block;
+  margin-bottom: 65px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.processItem h3 {
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: 25px;
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.processItem p {
+  max-width: 250px;
+  margin: 18px 0 0;
+  color: var(--grey);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+/* Ligne décorative au survol */
+
+.processItem::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 32px;
+  width: 35px;
+  height: 2px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.processItem:hover::before {
+  transform: scaleX(1);
+}
+
+
+/* =========================================================
+   NOTRE MÉTHODE — TABLETTE
+   Passé de 4 à 5 étapes : la grille 4 colonnes ne tombe plus
+   juste, on repasse en 3 colonnes sur tablette pour éviter
+   une 5e carte esseulée sur sa propre ligne.
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .processGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .processItem:nth-child(4),
+  .processItem:nth-child(5) {
+    border-top: 1px solid var(--border);
+  }
+
+  .processItem:nth-child(3) {
+    border-right: 0;
+  }
+}
+
+
+/* =========================================================
+   NOTRE MÉTHODE — MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .processGrid {
+    grid-template-columns: 1fr;
+    margin-top: 45px;
+  }
+
+  .processItem,
+  .processItem:nth-child(4),
+  .processItem:nth-child(5) {
+    min-height: auto;
+    padding: 30px 24px 35px;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-top: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .processItem:last-child {
+    border-bottom: 0;
+  }
+
+  .processItem > span {
+    margin-bottom: 40px;
+  }
+
+  .processItem h3 {
+    font-size: 22px;
+  }
+
+  .processItem p {
+    max-width: none;
+  }
+
+  .processItem::before {
+    left: 24px;
+  }
+}
+
+/* =========================================================
+   BUDGET
+   ========================================================= */
+
+.priceSection {
+  padding: 120px 0;
+  background: #f3f6f8;
+}
+
+.priceBox {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 100px;
+  align-items: center;
+  padding: 75px 80px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+}
+
+.priceBox .sectionLabel {
+  display: block;
+  margin-bottom: 25px;
+}
+
+.priceBox h2 {
+  max-width: 450px;
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 64px);
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.priceBox h2 em {
+  color: var(--blue);
+  font-style: italic;
+}
+
+.priceBox > div:last-child {
+  max-width: 600px;
+}
+
+.priceBox p {
+  margin: 0 0 22px;
+  color: var(--grey);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.priceBox .primaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 25px;
+  margin-top: 18px;
+}
+
+
+/* =========================================================
+   BUDGET — TABLETTE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .priceSection {
+    padding: 90px 0;
+  }
+
+  .priceBox {
+    grid-template-columns: 1fr;
+    gap: 45px;
+    padding: 55px 45px;
+  }
+
+  .priceBox h2 {
+    max-width: 600px;
+  }
+
+  .priceBox > div:last-child {
+    max-width: none;
+  }
+}
+
+
+/* =========================================================
+   BUDGET — MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .priceSection {
+    padding: 70px 0;
+  }
+
+  .priceBox {
+    gap: 35px;
+    padding: 40px 24px;
+  }
+
+  .priceBox h2 {
+    font-size: 40px;
+  }
+
+  .priceBox p {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .priceBox .primaryButton {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* =========================================================
+   GARANTIES
+   ========================================================= */
+
+.guaranteesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 65px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.guaranteesGrid > div {
+  position: relative;
+  min-height: 270px;
+  padding: 35px 30px 40px;
+  border-right: 1px solid var(--border);
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+
+.guaranteesGrid > div:first-child {
+  border-left: 1px solid var(--border);
+}
+
+.guaranteesGrid > div:last-child {
+  border-right: 1px solid var(--border);
+}
+
+.guaranteesGrid > div:hover {
+  background: #f5f8fb;
+  transform: translateY(-4px);
+}
+
+.guaranteesGrid > div::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 30px;
+  width: 35px;
+  height: 2px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.guaranteesGrid > div:hover::before {
+  transform: scaleX(1);
+}
+
+.guaranteesGrid span {
+  display: block;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.guaranteesGrid h3 {
+  margin: 60px 0 16px;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 400;
+}
+
+.guaranteesGrid p {
+  max-width: 250px;
+  margin: 0;
+  color: var(--grey);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+
+/* =========================================================
+   GARANTIES — TABLETTE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .guaranteesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .guaranteesGrid > div:nth-child(3),
+  .guaranteesGrid > div:nth-child(4) {
+    border-top: 1px solid var(--border);
+  }
+
+  .guaranteesGrid > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .guaranteesGrid > div:nth-child(4) {
+    border-right: 1px solid var(--border);
+  }
+}
+
+
+/* =========================================================
+   GARANTIES — MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .guaranteesGrid {
+    grid-template-columns: 1fr;
+    margin-top: 45px;
+  }
+
+  .guaranteesGrid > div,
+  .guaranteesGrid > div:nth-child(3),
+  .guaranteesGrid > div:nth-child(4) {
+    min-height: auto;
+    padding: 30px 24px 35px;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-top: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .guaranteesGrid > div:last-child {
+    border-bottom: 0;
+  }
+
+  .guaranteesGrid h3 {
+    margin-top: 40px;
+    font-size: 22px;
+  }
+
+  .guaranteesGrid p {
+    max-width: none;
+  }
+
+  .guaranteesGrid > div::before {
+    left: 24px;
+  }
+}
+
+/* =========================================================
+   ZONE D'INTERVENTION
+   ========================================================= */
+
+.localSection {
+  padding: 125px 0;
+  background: var(--navy);
+  color: #ffffff;
+}
+
+.localSection .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.localContent .sectionLabel {
+  color: #72b6ea;
+}
+
+.localContent h2 {
+  margin: 25px 0 0;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 64px);
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.localContent h2 em {
+  color: #72b6ea;
+  font-style: italic;
+}
+
+.localContent p {
+  max-width: 560px;
+  margin: 35px 0 0;
+  color: #aebbc6;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+
+/* =========================================================
+   LISTE DES COMMUNES
+   ========================================================= */
+
+.locationList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.locationList > div {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  min-height: 95px;
+  padding: 20px 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+  transition:
+    background 0.3s ease,
+    padding-left 0.3s ease;
+}
+
+.locationList > div:nth-child(odd) {
+  border-right: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.locationList > div:hover {
+  background: rgba(255, 255, 255, 0.04);
+  padding-left: 32px;
+}
+
+.locationList span {
+  color: #72b6ea;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.locationList strong {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   ZONE — TABLETTE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .localSection {
+    padding: 90px 0;
+  }
+
+  .localSection .container {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  .localContent p {
+    max-width: 700px;
+  }
+}
+
+
+/* =========================================================
+   ZONE — MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .localSection {
+    padding: 75px 0;
+  }
+
+  .localSection .container {
+    gap: 45px;
+  }
+
+  .localContent h2 {
+    font-size: 40px;
+  }
+
+  .localContent p {
+    margin-top: 25px;
+    font-size: 14px;
+  }
+
+  .locationList {
+    grid-template-columns: 1fr;
+  }
+
+  .locationList > div {
+    min-height: 75px;
+    padding: 18px 20px;
+  }
+
+  .locationList > div:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .locationList > div:hover {
+    padding-left: 25px;
+  }
+}
+
+/* =========================================================
+   FAQ
+   ========================================================= */
+
+.faqLayout {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  gap: 110px;
+  align-items: start;
+}
+
+.faqIntro {
+  position: sticky;
+  top: 30px;
+}
+
+.faqIntro h2 {
+  margin: 25px 0 0;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 62px);
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.faqIntro h2 em {
+  color: var(--blue);
+  font-style: italic;
+}
+
+.faqIntro p {
+  max-width: 400px;
+  margin: 30px 0 0;
+  color: var(--grey);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+
+/* =========================================================
+   FAQ — QUESTIONS
+   Le H3 est maintenant à l'intérieur de <summary> (balisage
+   requis par le brief). Le style ci-dessous neutralise les
+   marges par défaut du H3 pour qu'il se comporte comme le
+   <span> qu'il remplace.
+   ========================================================= */
+
+.faqList {
+  border-top: 1px solid var(--border);
+}
+
+.faqList details {
+  border-bottom: 1px solid var(--border);
+}
+
+.faqList summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  min-height: 90px;
+  padding: 20px 5px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faqList summary::-webkit-details-marker {
+  display: none;
+}
+
+.faqList summary::marker {
+  display: none;
+}
+
+.faqList summary h3 {
+  margin: 0;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  transition: color 0.25s ease;
+}
+
+.faqList summary:hover h3 {
+  color: var(--blue);
+}
+
+.faqList summary b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  color: var(--navy);
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1;
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+.faqList details[open] summary b {
+  transform: rotate(45deg);
+  background: var(--navy);
+  color: #ffffff;
+}
+
+.faqList details p {
+  max-width: 700px;
+  margin: 0;
+  padding: 0 70px 30px 5px;
+  color: var(--grey);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+
+/* =========================================================
+   FAQ — TABLETTE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .faqLayout {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  .faqIntro {
+    position: static;
+  }
+
+  .faqIntro p {
+    max-width: 650px;
+  }
+}
+
+
+/* =========================================================
+   FAQ — MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .faqLayout {
+    gap: 45px;
+  }
+
+  .faqIntro h2 {
+    font-size: 40px;
+  }
+
+  .faqIntro p {
+    margin-top: 25px;
+    font-size: 14px;
+  }
+
+  .faqList summary {
+    min-height: 80px;
+    padding: 18px 0;
+    gap: 15px;
+  }
+
+  .faqList summary h3 {
+    font-size: 14px;
+  }
+
+  .faqList summary b {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+
+  .faqList details p {
+    padding: 0 35px 25px 0;
+    font-size: 13px;
+  }
+}
+
+/* =========================================================
+   CONTACT
+   ========================================================= */
+
+.contactSection {
+  padding: 125px 0;
+  background: #f3f6f8;
+}
+
+.contactSection .container {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 100px;
+  align-items: start;
+}
+
+
+/* =========================================================
+   CONTACT — INTRODUCTION
+   ========================================================= */
+
+.contactIntro {
+  padding-top: 10px;
+}
+
+.contactIntro .sectionLabel {
+  display: block;
+  margin-bottom: 25px;
+}
+
+.contactIntro h2 {
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 64px);
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.contactIntro h2 em {
+  color: var(--blue);
+  font-style: italic;
+}
+
+.contactIntro > p {
+  max-width: 500px;
+  margin: 35px 0 0;
+  color: var(--grey);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.contactPhone {
+  display: inline-block;
+  margin-top: 20px;
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: 32px;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.contactPhone:hover {
+  color: var(--blue);
+}
+
+.contactNote {
+  display: block;
+  max-width: 350px;
+  margin-top: 10px;
+  color: var(--grey);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   FORMULAIRE
+   ========================================================= */
+
+.contactForm {
+  padding: 50px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.contactForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 25px;
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.contactForm input,
+.contactForm select,
+.contactForm textarea {
+  width: 100%;
+  padding: 16px 17px;
+  border: 1px solid #d7dfe5;
+  outline: none;
+  background: #ffffff;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.contactForm input::placeholder,
+.contactForm textarea::placeholder {
+  color: #9aa6b1;
+}
+
+.contactForm input:focus,
+.contactForm select:focus,
+.contactForm textarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.contactForm textarea {
+  min-height: 150px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.contactForm select {
+  cursor: pointer;
+}
+
+.contactForm .primaryButton {
+  border: 0;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.contactForm > small {
+  display: block;
+  max-width: 500px;
+  margin-top: 18px;
+  color: #8b98a4;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   CONTACT — TABLETTE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .contactSection {
+    padding: 90px 0;
+  }
+
+  .contactSection .container {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+
+  .contactIntro > p {
+    max-width: 700px;
+  }
+
+  .contactNote {
+    max-width: 500px;
+  }
+}
+
+
+/* =========================================================
+   CONTACT — MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .contactSection {
+    padding: 75px 0;
+  }
+
+  .contactSection .container {
+    gap: 45px;
+  }
+
+  .contactIntro h2 {
+    font-size: 40px;
+  }
+
+  .contactIntro > p {
+    margin-top: 25px;
+    font-size: 14px;
+  }
+
+  .contactPhone {
+    margin-top: 20px;
+    font-size: 27px;
+  }
+
+  .contactForm {
+    padding: 30px 22px;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .contactForm input,
+  .contactForm select,
+  .contactForm textarea {
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  .contactForm .primaryButton {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+  padding: 80px 0 30px;
+  background: var(--navy);
+  color: #ffffff;
+}
+
+.footerTop {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 65px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ---------------------------------------------------------
+   BRAND
+   --------------------------------------------------------- */
+
+.footerBrand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footerLogo {
+  display: inline-flex;
+  align-items: center;
+}
+
+.footerLogo img {
+  display: block;
+  width: 130px;
+  height: auto;
+  object-fit: contain;
+}
+
+.footerBrand p {
+  margin: 25px 0 0;
+  color: #9caab7;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* ---------------------------------------------------------
+   COLONNES
+   --------------------------------------------------------- */
+
+.footerColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.footerColumn > span {
+  margin-bottom: 12px;
+  color: #72b6ea;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.footerColumn a {
+  color: #aebbc6;
+  font-size: 13px;
+  line-height: 1.5;
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.footerColumn a:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+/* ---------------------------------------------------------
+   BAS DU FOOTER
+   --------------------------------------------------------- */
+
+.footerBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  padding-top: 25px;
+}
+
+.footerBottom span {
+  color: #71808d;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   FOOTER — TABLETTE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .footer {
+    padding: 65px 0 25px;
+  }
+
+  .footerTop {
+    grid-template-columns: 1fr 1fr;
+    gap: 50px 40px;
+  }
+
+  .footerBrand {
+    grid-column: 1 / -1;
+  }
+
+  .footerBottom {
+    flex-wrap: wrap;
+  }
+}
+
+/* =========================================================
+   FOOTER — MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .footer {
+    padding: 55px 0 25px;
+  }
+
+  .footerTop {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-bottom: 45px;
+  }
+
+  .footerBrand {
+    grid-column: auto;
+  }
+
+  .footerColumn {
+    gap: 10px;
+  }
+
+  .footerBottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .footerBottom span {
+    font-size: 9px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .container {
+    width: min(100% - 36px, 900px);
+  }
+
+  .nav {
+    gap: 18px;
+  }
+
+  .nav a {
+    font-size: 11px;
+  }
+
+  .phone {
+    display: none;
+  }
+
+  .hero {
+    min-height: 680px;
+  }
+
+  .heroOverlay {
+    background:
+      linear-gradient(
+        90deg,
+        #0c131c 0%,
+        #0c131c 42%,
+        rgba(12, 19, 28, 0.8) 70%,
+        rgba(12, 19, 28, 0.25) 100%
+      );
+  }
+
+  .sectionHeader,
+  .aboutSection .container,
+  .priceBox,
+  .localSection .container,
+  .faqLayout,
+  .contactSection .container {
+    gap: 50px;
+  }
+
+  .expertiseContent {
+    padding: 45px;
+  }
+
+  .processGrid,
+  .guaranteesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .guaranteesGrid > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .guaranteesGrid > div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .footerTop {
+    grid-template-columns: 1.5fr 1fr 1fr;
+  }
+
+  .footerTop > div:last-child {
+    grid-column: 2 / 4;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   Menu déroulant : la nav reste dans le HTML (bonne pour le
+   SEO) et se déplie via .navToggleInput:checked ~ .nav, sans
+   JavaScript.
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .container {
+    width: calc(100% - 32px);
+  }
+
+  .header .container {
+    min-height: 74px;
+  }
+
+  .logo img {
+    width: 95px;
+  }
+
+  .nav {
+    display: none;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+
+    padding: 10px 20px 20px;
+
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 12px 24px rgba(12, 19, 28, 0.08);
+  }
+
+  .nav a {
+    width: 100%;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav a:last-child {
+    border-bottom: 0;
+  }
+
+  .navToggleInput:checked ~ .nav {
+    display: flex;
+  }
+
+  .menuButton {
+    display: block;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .heroImage {
+    inset: 0;
+  }
+
+  .heroImage img {
+    object-position: center;
+  }
+
+  .heroOverlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(12, 19, 28, 0.62) 0%,
+        rgba(12, 19, 28, 0.86) 45%,
+        #0c131c 100%
+      );
+  }
+
+  .heroContent {
+    padding: 120px 0 80px;
+  }
+
+  .hero h1 {
+    font-size: clamp(46px, 13vw, 64px);
+  }
+
+  .heroContent > p {
+    font-size: 15px;
+  }
+
+  .heroButtons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+
+  .heroStats {
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-top: 45px;
+  }
+
+  .heroStats div {
+    min-width: 90px;
+  }
+
+  .heroScroll {
+    display: none;
+  }
+
+  .section,
+  .aboutSection,
+  .contactSection {
+    padding: 80px 0;
+  }
+
+  .sectionHeader,
+  .aboutSection .container,
+  .priceBox,
+  .localSection .container,
+  .faqLayout,
+  .contactSection .container {
+    display: block;
+  }
+
+  .sectionHeader h2,
+  .aboutContent h2,
+  .priceBox h2,
+  .localSection h2,
+  .faqLayout h2,
+  .contactIntro h2 {
+    font-size: clamp(39px, 11vw, 55px);
+  }
+
+  .sectionHeader > p,
+  .sectionHeaderText {
+    margin-top: 28px;
+  }
+
+  .sectionHeader {
+    margin-bottom: 50px;
+  }
+
+  .expertiseGrid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .expertiseImage {
+    min-height: 380px;
+  }
+
+  .expertiseContent {
+    padding: 45px 30px;
+  }
+
+  .expertiseContent h3:first-of-type {
+    font-size: 36px;
+  }
+
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .projectsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .aboutSection .container {
+    display: flex;
+    flex-direction: column;
+    gap: 55px;
+  }
+
+  .aboutStats {
+    gap: 25px;
+    justify-content: space-between;
+  }
+
+  .aboutStats strong {
+    font-size: 34px;
+  }
+
+  .processGrid,
+  .guaranteesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .processGrid > div,
+  .guaranteesGrid > div {
+    min-height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .processGrid > div:last-child,
+  .guaranteesGrid > div:last-child {
+    border-bottom: 0;
+  }
+
+  .processGrid h3,
+  .guaranteesGrid h3 {
+    margin-top: 35px;
+  }
+
+  .priceBox {
+    padding: 45px 30px;
+  }
+
+  .priceBox > div:last-child {
+    margin-top: 35px;
+  }
+
+  .localSection .container > div:last-child {
+    margin-top: 40px;
+  }
+
+  .faqLayout > div:last-child {
+    margin-top: 45px;
+  }
+
+  .contactIntro {
+    margin-bottom: 45px;
+  }
+
+  .contactForm {
+    padding: 28px 20px;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .footerTop {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 25px;
+    padding: 55px 0;
+  }
+
+  .footerTop > div:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .footerTop > div:last-child {
+    grid-column: auto;
+  }
+
+  .footerBottom {
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 0;
+  }
+}
+
+/* =========================================================
+   PETIT MOBILE
+   ========================================================= */
+
+@media (max-width: 430px) {
+  .heroContent {
+    padding-top: 100px;
+  }
+
+  .hero h1 {
+    font-size: 45px;
+  }
+
+  .heroStats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .heroStats strong {
+    font-size: 24px;
+  }
+
+  .heroStats span {
+    font-size: 9px;
+  }
+
+  .expertiseContent {
+    padding: 38px 24px;
+  }
+
+  .expertiseContent h3:first-of-type {
+    font-size: 30px;
+  }
+
+  .projectInfo {
+    padding: 23px 20px;
+  }
+
+  .aboutStats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .aboutStats strong {
+    font-size: 28px;
+  }
+
+  .aboutStats span {
+    font-size: 9px;
+  }
+
+  .locationList span {
+    padding: 11px 13px;
+    font-size: 11px;
+  }
+
+  .contactPhone {
+    font-size: 25px;
+  }
+
+  .footerTop {
+    grid-template-columns: 1fr;
+  }
+
+  .footerTop > div:last-child {
+    grid-column: auto;
+  }
 }
