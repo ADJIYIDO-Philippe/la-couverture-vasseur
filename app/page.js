@@ -65,7 +65,7 @@ const services = [
     number: "07",
     title: "Isolation des combles",
     text: "Une toiture performante passe aussi par une isolation adaptée. Nous vous accompagnons dans vos projets d'amélioration du confort.",
-    image: "/images/artisan-couvreur.jfif",
+    image: "/images/expertise.jpeg",
   },
 ];
 
