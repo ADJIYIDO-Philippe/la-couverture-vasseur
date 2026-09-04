@@ -29,7 +29,7 @@ const services = [
     number: "01",
     title: "Réfection de toiture",
     text: "Réfection complète ou partielle de toitures en ardoise, avec une attention particulière portée à l'étanchéité, aux finitions et au respect du bâti angevin.",
-    image: "/images/toiture-angers.WEBP",
+    image: "/images/toiture-angers.webp",
   },
   {
     number: "02",
@@ -41,13 +41,13 @@ const services = [
     number: "03",
     title: "Couverture ardoise",
     text: "L'ardoise naturelle est au cœur de notre savoir-faire. Pose, remplacement et rénovation dans le respect des techniques traditionnelles.",
-    image: "/images/couvertureardoise.JPEG",
+    image: "/images/couvertureardoise.jpeg",
   },
   {
     number: "04",
     title: "Zinguerie",
     text: "Gouttières, chéneaux, descentes, noues et raccords : des ouvrages de zinguerie conçus pour accompagner durablement votre couverture.",
-    image: "/images/zinguerie.WEBP",
+    image: "/images/zinguerie.webp",
   },
   {
     number: "05",
@@ -65,7 +65,7 @@ const services = [
     number: "07",
     title: "Isolation des combles",
     text: "Une toiture performante passe aussi par une isolation adaptée. Nous vous accompagnons dans vos projets d'amélioration du confort.",
-    image: "/images/artisan-couvreur.JFIF",
+    image: "/images/artisan-couvreur.jfif",
   },
 ];
 
@@ -486,7 +486,7 @@ export default function Home() {
             <div className={styles.expertiseImage}>
 
               <Image
-                src="/images/expertise.JPEG"
+                src="/images/expertise.jpeg"
                 alt="Couverture en ardoise traditionnelle à Angers"
                 fill
                 sizes="(max-width: 900px) 100vw, 55vw"
